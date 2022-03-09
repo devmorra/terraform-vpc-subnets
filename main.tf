@@ -27,14 +27,14 @@ locals {
       name       = join(" ", [n % 2 == 1 ? "Terraform public subnet" : "Terraform private subnet", tostring(ceil(n / 2))])
       cidr_block = cidrsubnet(var.initial_cidr_block, local.mask_shift, n)
       az         = local.azs[ceil(n / 2 - 1) % length(local.azs)]
-      public     = n % 1 == 1 ? true : false
+      public     = n % 2 == 1 ? true : false
     }
   ]
 }
 
-# output "subnet_defs" {
-#   value = local.subnet_definitions
-# }
+output "subnet_defs" {
+  value = local.subnet_definitions
+}
 
 resource "aws_vpc" "main" {
   cidr_block = var.initial_cidr_block
